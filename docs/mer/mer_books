@@ -1,0 +1,30 @@
+// Modelo Entidade-Relacionamento para Biblioteca Comunitária (Livro -> Exemplar -> Empréstimo)
+
+Table Morador {
+  id_morador integer [pk, increment, note: 'Chave Primária']
+  nome varchar(100) [not null]
+  endereco varchar(200) [not null]
+  telefone varchar(20) [not null]
+}
+
+Table Livro {
+  codigo_identificacao varchar(50) [pk, note: 'Código Único da Obra/Título']
+  titulo varchar(150) [not null]
+  autor varchar(100) [not null]
+  ano_publicacao integer [not null]
+}
+
+Table Exemplar {
+  id_exemplar integer [pk, increment, note: 'Código Único da Cópia Física']
+  codigo_livro varchar(50) [not null, ref: > Livro.codigo_identificacao, note: 'Relacionamento 1:N com Livro']
+  numero_exemplar integer [not null, note: 'Ex: Cópia 1, Cópia 2 ou Cópia 3']
+}
+
+Table Emprestimo {
+  id_emprestimo integer [pk, increment, note: 'Chave Primária']
+  id_morador integer [not null, ref: > Morador.id_morador]
+  id_exemplar integer [not null, ref: > Exemplar.id_exemplar, note: 'O empréstimo é feito da cópia específica']
+  data_emprestimo date [not null]
+  data_prevista_devolucao date [not null]
+  data_devolucao_real date [null, note: 'Em branco até o livro ser devolvido']
+}
